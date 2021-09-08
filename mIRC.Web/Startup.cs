@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using mIRC.Db;
 using mIRC.Db.Entities;
-
+using mIRC.Web.Hubs;
 
 namespace mIRC.Web
 {
@@ -33,6 +33,22 @@ namespace mIRC.Web
 
             services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<mIRCDbContext>();
+
+            services.AddAuthentication()
+                //.AddMicrosoftAccount(microsoftOptions =>
+                //{
+                //    microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+                //    microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+                //})
+                .AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                });
+
+            // live chat support
+            services.AddSignalR();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +81,7 @@ namespace mIRC.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<ChatHub>("/hubs/chat");
             });
 
             app.UseSpa(spa =>

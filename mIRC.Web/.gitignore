@@ -230,3 +230,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# hide sensitive data
+appsettings.json
+appsettings.Development.json
