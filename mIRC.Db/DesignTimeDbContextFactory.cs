@@ -11,11 +11,10 @@ namespace mIRC.Db
 
         public mIRCDbContext CreateDbContext(string[] args)
         {
-            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
                    .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../mIRC.Web"))
-                   .AddJsonFile($"appsettings{environment}.json").Build();
+                   .AddJsonFile($"appsettings.json").Build();
 
             var builder = new DbContextOptionsBuilder<mIRCDbContext>();
             var connectionString = configuration.GetConnectionString("DefaultConnection");
